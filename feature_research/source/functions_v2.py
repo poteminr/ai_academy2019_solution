@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import sys
 from source.new_feature import targets_names
-import tsfresh  
+import tsfresh
 from tsfresh.feature_extraction import extract_features
 
 # items_id = list(pd.read_csv('ai-academy-2019-skill-prediction-data-csv-v1/dota2_items.csv')['item_id'])
@@ -253,31 +253,26 @@ def gold_deviation(lines, n=None):
 
     data = []
     for json_line in lines:
-        if json_line['player_team'] == 'dire':
+        player_team = record['player_team']
 
-            player_series = json_line['series']['player_gold'][18:]
-            radiant_series = json_line['series']['radiant_gold'][18:]
-            dire_series = json_line['series']['dire_gold'][18:]
-
-            mean_dire_series = np.subtract(dire_series,player_series) / 4
-            mean_radiant_series = np.array(radiant_series) / 5
-
-            friend_dev = np.mean(np.subtract(player_series,mean_dire_series))
-            enemy_dev = np.mean(np.subtract(player_series,mean_radiant_series))
+        if player_team == 'dire':
+            enemy_team = 'radiant'
         else:
+            enemy_team ='dire'
+
 
             player_series = json_line['series']['player_gold'][18:]
-            radiant_series = json_line['series']['radiant_gold'][18:]
-            dire_series = json_line['series']['dire_gold'][18:]
+            friend_series = json_line['series'][player_team+'_gold'][18:]
+            enemy_series = json_line['series'][enemy_team+'_gold'][18:]
 
-            mean_radiant_series  = np.subtract(radiant_series, player_series) / 4
-            mean_dire_series = np.array(dire_series) / 5
+            mean_frined_team = np.subtract(friend_series, player_series) / 4
+            mean_enemy_series = np.array(enemy_series) / 5
 
-            friend_dev = np.mean(np.subtract(player_series,mean_radiant_series))
-            enemy_dev = np.mean(np.subtract(player_series,mean_dire_series))
+            friend_dev = np.mean(np.subtract(player_series, mean_friend_team))
+            enemy_dev = np.mean(np.subtract(player_series, mean_enemy_series))
 
-        data.append([friend_dev, enemy_dev])
-    
+            data.append([friend_dev, enemy_dev])
+
     return np.array(data)
 
 
@@ -310,7 +305,7 @@ def get_items_frequency(lines, n=None, placeholder=0):
 
     return items
 
-        
+
 def poly_trend(timeseries, degree=1):
     """
     Поиск прямой, которая максимально соответствует тренду TS
