@@ -253,7 +253,7 @@ def gold_deviation(lines, n=None):
 
     data = []
     for json_line in lines:
-        player_team = record['player_team']
+        player_team = json_line['player_team']
 
         if player_team == 'dire':
             enemy_team = 'radiant'
@@ -265,7 +265,7 @@ def gold_deviation(lines, n=None):
             friend_series = json_line['series'][player_team+'_gold'][18:]
             enemy_series = json_line['series'][enemy_team+'_gold'][18:]
 
-            mean_frined_team = np.subtract(friend_series, player_series) / 4
+            mean_friend_team = np.subtract(friend_series, player_series) / 4
             mean_enemy_series = np.array(enemy_series) / 5
 
             friend_dev = np.mean(np.subtract(player_series, mean_friend_team))
