@@ -10,3 +10,5 @@
 * 3 место финальный этап ROC-AUC 0.91136 - Google Colab
 * 7 место онлайн этап ACCURACY 0.83430 - Свой сервер
 
+## О решении:
+potemin_3rd_place.pdf
